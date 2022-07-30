@@ -5,7 +5,7 @@ import static java.util.stream.Collectors.toList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import nextstep.subway.applicaion.dto.PathResponse;
-import nextstep.subway.applicaion.dto.StationResponse;
+import nextstep.subway.applicaion.dto.PathStationResponse;
 import nextstep.subway.common.exception.CustomException;
 import nextstep.subway.common.exception.message.PathErrorMessage;
 import nextstep.subway.domain.Line;
@@ -37,13 +37,9 @@ public class PathService {
 
   private PathResponse getPathResponse(Station sourceStation, Station targetStation) {
     PathResponse pathResponse = new PathResponse();
-    List<Line> lines = lineRepository.findAll();
-    for (Line line : lines) {
-
-      if (lineContainStations(line, sourceStation,targetStation)) {
-        getPathFinder(line, sourceStation, targetStation, pathResponse);
-      }
-    }
+    lineRepository.findAll().stream()
+        .filter(line -> lineContainStations(line, sourceStation, targetStation))
+        .forEach(line -> getPathFinder(line, sourceStation, targetStation, pathResponse));
 
     return pathResponse;
   }
@@ -63,9 +59,9 @@ public class PathService {
     }
   }
 
-  private List<StationResponse> getStationResponse(List<Station> stations) {
+  private List<PathStationResponse> getStationResponse(List<Station> stations) {
     return stations.stream()
-        .map(StationResponse::createStationResponse)
+        .map(PathStationResponse::createStationResponse)
         .collect(toList());
   }
 

@@ -11,9 +11,9 @@ public class PathResponse {
 
   private int distance = Integer.MAX_VALUE;
 
-  private List<StationResponse> stations = new ArrayList<>();
+  private List<PathStationResponse> stations = new ArrayList<>();
 
-  public void changeStations(List<StationResponse> stations) {
+  public void changeStations(List<PathStationResponse> stations) {
     this.stations = stations;
   }
 
